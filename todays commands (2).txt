@@ -1,0 +1,157 @@
+1  curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+
+    2  sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+
+    3  yum install docker -y && systemctl start docker
+
+    4  minikube start --driver=docker --force
+
+    5     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+    6  chmod +x kubectl
+
+    7  mkdir mustafa
+
+    8  cd mustafa/
+
+    9  openssl genrsa -out mustafa.key 2048
+
+   10  ll
+
+   11  openssl req -new -key mustafa.key -out mustafa.csr -subj "/CN=mustafa/O=group1"
+
+   12  ll
+
+   13  openssl x509 -req -in mustafa.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out mustafa.crt -days 500
+
+   14  ll
+
+   15   kubectl config set-credentials mustafa --client-certificate=mustafa.crt --client-key=mustafa.key
+
+   16  cd
+
+   17  ll
+
+   18  mv kubectl /usr/local/bin/
+
+   19  cd mustafa/
+
+   20   kubectl config set-credentials mustafa --client-certificate=mustafa.crt --client-key=mustafa.key
+
+   21  kubectl config view
+
+   22  cd
+
+   23  kubectl config view
+
+   24  kubectl config set-context mustafa --cluster=minikube --user=mustafa
+
+   25  kubectl config view
+
+   26  kubectl config use-context mustafa
+
+   27  kubectl get po
+
+   28  kubectl get rs
+
+   29  kubectl get svc
+
+   30  kubectl get deploy
+
+   31  kubectl run pod-1 --image=nginx
+
+   32  kubectl config use-context minikube
+
+   33  kubectl get po
+
+   34  kubectl run  pod-1 --image=nginx
+
+   35  kubectl get po
+
+   36  vim role.yml
+
+   37  kubectl create ns dev
+
+   38  kubectl create -f role.yml
+
+   39  vim role.yml
+
+   40  vim rolebinding.yml
+
+   41  kubectl create -f rolebinding.yml
+
+   42  kubectl config use-context mustafa
+
+   43  kubectl config view
+
+   44  kubectl get po
+
+   45  kubectl get po -n dev
+
+   46  kubectl run pod-1 --image=nginx -n dev
+
+   47  kubectl run pod-1 --image=nginx
+
+   48  kubectl get po -n dev
+
+   49  kubectl delete pod pod-1 -n dev
+
+   50  kubectl config use-context minikube
+
+   51  ll
+
+   52  vim role.yml
+
+   53  kubectl apply -f role.yml
+
+   54  kubectl config use-context mustafa
+
+   55  kubectl delere pod pod-1 -n dev
+
+   56  kubectl delete pod pod-1 -n dev
+
+   57  kubectl config use-context minikube
+
+   58  ll
+
+   59  cp role.yml clusterrole.yml
+
+   60  vim clusterrole.yml
+
+   61  kubectl create -f clusterrole.yml
+
+   62  kubectl get clusterrole
+
+   63  ll
+
+   64  cp rolebinding.yml clusterrolebinding.yml
+
+   65  vim clusterrolebinding.yml
+
+   66  kubectl create -f clusterrolebinding.yml
+
+   67  kubectl create ns test
+
+   68  kubectl config use-context mustafa
+
+   69  kubectl get po
+
+   70  kubectl run pod-2 --image=nginx
+
+   71  kubectl delet pod pod-1
+
+   72  kubectl delete pod pod-1
+
+   73  kubectl get po -n dev
+
+   74  kubectl get po -n test
+
+   75  kubectl run pod-22 --image=nginx -n dev
+
+   76  kubectl run pod-22 --image=nginx -n test
+
+   77  kubectl delete pod pod-22 -n dev
+
+   78  kubectl delete pod pod-22 -n test
+
+   79  history
